@@ -1,4 +1,4 @@
-# pyRETROICOR
+# PyRETROICOR
 Python implementation of RETROICOR
 
 ## Dependency
