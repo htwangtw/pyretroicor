@@ -1,6 +1,10 @@
 # pyRETORICOR
 Python implementation of RETORICOR
 
+## Dependency
+Python 3
+numpy >= 1.18
+
 ## To-do
 - [ ] set-up file
 - [ ] r peak detection for cardiac data
