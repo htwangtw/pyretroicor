@@ -1,4 +1,4 @@
-# pyRETORICOR
+# pyRETROICOR
 Python implementation of RETORICOR
 
 ## Dependency
