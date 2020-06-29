@@ -1,6 +1,6 @@
 import numpy as np
 
-def retoricor_cardiac(time, r_peak, M):
+def retroicor_cardiac(time, r_peak, M):
     '''
     we need documentations
     translated from matlab code
@@ -41,9 +41,9 @@ def retoricor_cardiac(time, r_peak, M):
     return regr
 
 
-def retoricor_cardiac(resp_f, M, fs):
+def retroicor_cardiac(resp_f, M, fs):
     '''
-    wtf
+    need doc
     '''
     nt = len(resp_f)
     resp_phase = np.zeros(nt)
