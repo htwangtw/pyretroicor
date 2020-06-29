@@ -1,5 +1,5 @@
 # pyRETROICOR
-Python implementation of RETORICOR
+Python implementation of RETROICOR
 
 ## Dependency
 Python 3  
