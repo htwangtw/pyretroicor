@@ -41,7 +41,7 @@ def retroicor_cardiac(time, r_peak, M):
     return regr
 
 
-def retroicor_cardiac(resp_f, M, fs):
+def retroicor_respiration(resp_f, M, fs):
     '''
     need doc
     '''
