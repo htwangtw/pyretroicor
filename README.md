@@ -1,5 +1,5 @@
 # PyRETROICOR
-Python implementation of RETROICOR
+Python implementation of RETROICOR (Glover et al., 2000) - physiology regressors for fMRI preprocessing.
 
 ## Dependencies
 **[Python 3](https://www.python.org/)**
