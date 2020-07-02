@@ -4,8 +4,7 @@
 
 import pytest
 
-
-from pyretroicor import pyretroicor
+from pyretroicor import retroicor
 
 
 @pytest.fixture
