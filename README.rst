@@ -29,6 +29,7 @@ The required dependencies to use the software are:
 
 * Python >= 3.5
 * NumPy >= 1.18
+* Scipy >= 1.5
 * Nibabel >= 2.5
 
 Install

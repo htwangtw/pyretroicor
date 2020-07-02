@@ -1,5 +1,7 @@
 import numpy as np
 
+from pyretroicor.prepro import rolling_mad
+
 def retroicor_cardiac(time, r_peak, M=3):
     '''
     we need documentations
@@ -30,29 +32,38 @@ def retroicor_cardiac(time, r_peak, M=3):
         else:
             t1 = r_peak[peak_idx - 1]
             t2 = r_peak[peak_idx]
-        cardiac_phase[i] = 2 * np.pi * (t - t1) / (t2 - t1) # Eq 2
+        cardiac_phase[i] = 2 * np.pi * (t - t1) / (t2 - t1)  # Eq. 2
 
     regr = np.zeros((num_time, M * 2))
-    for i in range(M):
+    for i in range(M):  # Eq. 1
         regr[:,i * 2] = np.cos((i + 1) * cardiac_phase)
         regr[:,(i * 2) + 1] = np.sin((i + 1) * cardiac_phase)
 
     return regr
 
 
-def retroicor_respiratory(resp, M=3):
+def retroicor_respiratory(resp, fs, M=3):
     '''
     need doc
     '''
     num_time = len(resp)
     resp_phase = np.zeros(num_time)
 
-    # the algorithm
+    # Histogram-equalized transfer function between 
+    # respiratory amplitude and respiratory phase
     nb = 500
     val, edges = np.histogram(resp, bins=nb)
+    
+    # dR/dT
+    diff_resp = np.diff(resp)
+    diff_resp = np.append(diff_resp, diff_resp[-1])
 
-    for i in range(num_time):
-        v = resp[i]
+    time = np.arange(0, diff_resp.shape[0])
+    outliers = rolling_mad(diff_resp, int(0.5 * fs))
+    diff_resp = np.interp(time, time[~outliers], diff_resp[~outliers])
+
+    for i in range(num_time):  # Eq 3
+        v = diff_resp[i]
         closest_peak = np.abs(v - edges)
         edge = np.where(closest_peak == np.amin(closest_peak))[0][0]
         if (edge - v) > 0:
@@ -64,7 +75,7 @@ def retroicor_respiratory(resp, M=3):
         resp_phase[i] = np.pi * area * sign_resp / num_time
 
     regr = np.zeros((num_time, M * 2))
-    for i in range(M):
+    for i in range(M):  # Eq.4
         regr[:,i * 2] = np.cos((i + 1)  * resp_phase)
         regr[:,(i * 2) + 1] = np.sin((i + 1)  * resp_phase)
 

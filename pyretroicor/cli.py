@@ -41,7 +41,7 @@ def main():
 
     # load some parameters
     tr = func_meta["RepetitionTime"]
-    n_vol = func.shape[0]
+    n_vol = func.shape[-1]
 
     # create time reference for physio
     time, physio = physio_time(physio, 
@@ -56,13 +56,12 @@ def main():
     respiratory = physio[:, physio_meta["Columns"].index("respiratory")]
 
     # peak detection and cleaning, run retroicor
-    r_peak = process_cardiac(cardiac, physio_meta["SamplingFrequency"])  # r peak index
-    r_peak = time[r_peak]  # r peak time point
-    retro_card = retroicor_cardiac(time, r_peak, M)
+    peak_idx, peak_t = process_cardiac(cardiac, physio_meta["SamplingFrequency"])  # r peak index
+    retro_card = retroicor_cardiac(time, peak_t, M)
 
     # cleaning and run retroicor
     respiratory = process_resp(respiratory, physio_meta["SamplingFrequency"])
-    retro_resp = retroicor_respiratory(respiratory, M)
+    retro_resp = retroicor_respiratory(respiratory, physio_meta["SamplingFrequency"], M)
 
     # extract value per TR
     retroicor_regressors = np.hstack((retro_card, retro_resp))[tr_idx, :]

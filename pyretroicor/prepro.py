@@ -2,18 +2,44 @@
 
 import numpy as np
 
+from scipy import signal
+from scipy import interpolate
+from scipy.ndimage import median_filter
+
+
 def process_cardiac(cardiac, fs):
     '''
     preprocess cardiac signal and get R peaks times
+    the peak detection will be used to calculate rr interval 
+    so it doesn't need to be too precise.
     '''
-    # clean outliers
-    cardiac = smooth(cardiac, fs)
-    outliers = rolling_mad(cardiac, int(0.5 * fs))
-    time = np.arange(0, cardiac.shape[0])
-    clean = np.interp(time, time[~outliers], cardiac[~outliers])
+    # use 2.5 hz window (~=150 bpm) for peak detection
+    win_hz = 2.5
+    win_unit = int(fs / win_hz)
+
+    # butter bandpass filter
+    sos = signal.butter(2, [0.3, 10], 'bandpass',  fs=fs, output='sos')
+    cardiac = signal.sosfilt(sos, zscore(cardiac))
+
+    # linear detrend
+    cardiac = signal.detrend(zscore(cardiac))
+
+    # despike with median filter
+    cardiac = median_filter(cardiac, int(win_unit / 5))
+
+    # clean outliers > 2.5 SD
+    outliers = np.abs(zscore(cardiac)) > 2.5
+    time = np.arange(0, cardiac.shape[0]) * 1 / fs
+    f = interpolate.interp1d(time[~outliers], 
+                             cardiac[~outliers], 
+                             "cubic", fill_value="extrapolate")
+    cardiac_clean = f(time)  # update
+
     # get peaks
-    peak_idx = detect_peaks(clean, mpd=int(0.5 * fs))
-    return peak_idx
+    peak_idx = detect_peaks(cardiac_clean, mpd=win_unit)
+    peak_t = time[peak_idx] 
+
+    return peak_idx, peak_t
 
 def zscore(x):
     m = np.mean(x)
@@ -32,9 +58,9 @@ def detect_peaks(x, mpd):
         idx = idx[:-1]
 
     # remove peak smaller than average signal
-    idx = idx[x[idx] >= 0]
+    # idx = idx[x[idx] >= -1]
 
-    # remove peaks closer than mpd
+    # remove peaks closer than minimum peak distance (unit: sample)
     idx = idx[np.argsort(x[idx])][::-1]  # sort idx by peak height
     idel = np.zeros(idx.size, dtype=bool)
     for i in range(idx.size):
@@ -50,13 +76,24 @@ def process_resp(resp, fs):
     '''
     process respiratory data
     '''
-    resp_f = smooth(resp, fs)
-    resp_der = np.diff(resp_f)
-    resp_der = np.append(resp_der, resp_der[-1])
-    time = np.arange(0, resp_der.shape[0])
-    outliers = rolling_mad(resp_der, int(0.5 * fs))
-    clean = np.interp(time, time[~outliers], resp_der[~outliers])
-    return clean
+    # low pass filter
+    sos = signal.butter(2, 5, 'low',  fs=fs, output='sos')
+    resperation = signal.sosfilt(sos, zscore(resperation))
+    # linear detrend
+    resp = signal.detrend(zscore(resperation))
+
+    # despike with median filter
+    resp = median_filter(resp, int(win_unit / 5))
+
+    # clean outliers > 2.5 SD
+    outliers = np.abs(zscore(resp)) > 2.5
+    time = np.arange(0, resp.shape[0]) * 1 / fs
+    f = interpolate.interp1d(time[~outliers], 
+                             resp[~outliers], 
+                             "cubic", fill_value="extrapolate")
+    resp = f(time)  # update
+    return resp
+
 
 def mad(arr):
     """ Median Absolute Deviation: a "Robust" version of standard deviation.
@@ -84,15 +121,14 @@ def rolling_mad(a, win):
     bool_outliers[outliers] = True
     return bool_outliers
 
-
-def smooth(a, winsize):
+def lowpass_smooth(a, winsize):
     '''
     a: NumPy 1-D array containing the data to be smoothed
     winsize: smoothing window size needs, which must be odd number,
             as in the original MATLAB implementation
     '''
     winsize = int(winsize)
-    if winsize % 2 != 1:
+    if winsize % 2 != 1:  # the window must be a odd number
         winsize += 1
     out0 = np.convolve(a, np.ones(winsize, dtype=int),'valid') / winsize
     r = np.arange(1, winsize - 1, 2)
