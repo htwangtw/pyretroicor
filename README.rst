@@ -23,7 +23,7 @@ PyRETROICOR
 Python implementation of RETROICOR (Glover et al., 2000) - physiology regressors for fMRI preprocessing.
 
 Dependencies
-============
+------------
 
 The required dependencies to use the software are:
 
@@ -32,7 +32,7 @@ The required dependencies to use the software are:
 * Nibabel >= 2.5
 
 Install
-=======
+-------
 
 First make sure you have installed all the dependencies listed above.
 Then you can install pyretroicor by running the following command in
@@ -41,7 +41,7 @@ a command prompt::
     pip install -U --user pyretroicor
 
 Reference
-=========
+---------
 
 Glover, G. H., Li, T. Q., & Ress, D. (2000). Image‐based method for retrospective correction of physiological motion effects in fMRI: RETROICOR. Magnetic Resonance in Medicine: An Official Journal of the International Society for Magnetic Resonance in Medicine, 44(1), 162-167.
 
@@ -49,10 +49,10 @@ MATLAB implementation from: https://github.com/mkassinopoulos/PRF_estimation
 
 
 Support
-=======
+-------
 Please use `GitHub issues <https://github.com/htwangtw/pyretroicor/issues>` for questions, bug reports or feature requests.
 
 
 License
-=======
+-------
 This project is licensed under `BSD-3-Clause <https://opensource.org/licenses/BSD-3-Clause>`.
