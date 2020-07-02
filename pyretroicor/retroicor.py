@@ -7,7 +7,7 @@ def retroicor_cardiac(time, r_peak, M=3):
 
     r_peak - time of the r peaks
     time - tr time stamp?
-    M - ??????
+    M - Mth order of fourier series
     '''
 
     # the algorithm
@@ -34,8 +34,8 @@ def retroicor_cardiac(time, r_peak, M=3):
 
     regr = np.zeros((num_time, M * 2))
     for i in range(M):
-        regr[:,i * 2] = np.cos(i * cardiac_phase)
-        regr[:,(i * 2) + 1] = np.sin(i * cardiac_phase)
+        regr[:,i * 2] = np.cos((i + 1) * cardiac_phase)
+        regr[:,(i * 2) + 1] = np.sin((i + 1) * cardiac_phase)
 
     return regr
 
@@ -65,7 +65,7 @@ def retroicor_respiratory(resp, M=3):
 
     regr = np.zeros((num_time, M * 2))
     for i in range(M):
-        regr[:,i * 2] = np.cos(i * resp_phase)
-        regr[:,(i * 2) + 1] = np.sin(i * resp_phase)
+        regr[:,i * 2] = np.cos((i + 1)  * resp_phase)
+        regr[:,(i * 2) + 1] = np.sin((i + 1)  * resp_phase)
 
     return regr

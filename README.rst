@@ -9,9 +9,9 @@ PyRETROICOR
 .. image:: https://img.shields.io/travis/htwangtw/pyretroicor.svg
         :target: https://travis-ci.com/htwangtw/pyretroicor
 
-.. image:: https://readthedocs.org/projects/pyretroicor/badge/?version=latest
-        :target: https://pyretroicor.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+.. .. image:: https://readthedocs.org/projects/pyretroicor/badge/?version=latest
+..         :target: https://pyretroicor.readthedocs.io/en/latest/?badge=latest
+..         :alt: Documentation Status
 
 
 .. image:: https://pyup.io/repos/github/htwangtw/pyretroicor/shield.svg
@@ -20,16 +20,16 @@ PyRETROICOR
 
 
 
-Python implementation of RETROICOR.
+Python implementation of RETROICOR (Glover et al., 2000) - physiology regressors for fMRI preprocessing.
 
 Dependencies
 ============
 
 The required dependencies to use the software are:
 
-* [Python 3](https://www.python.org/) >= 3.5
-* [NumPy](http://www.numpy.org/) >= 1.18
-* [Nibabel](https://nipy.org/nibabel/) >= 2.5
+* Python >= 3.5
+* NumPy >= 1.18
+* Nibabel >= 2.5
 
 Install
 =======
@@ -50,9 +50,9 @@ MATLAB implementation from: https://github.com/mkassinopoulos/PRF_estimation
 
 Support
 =======
-Please use [GitHub issues](https://github.com/htwangtw/pyretroicor/issues) for questions, bug reports or feature requests.
+Please use `GitHub issues <https://github.com/htwangtw/pyretroicor/issues>` for questions, bug reports or feature requests.
 
 
 License
 =======
-This project is licensed under [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause).
+This project is licensed under `BSD-3-Clause <https://opensource.org/licenses/BSD-3-Clause>`.
