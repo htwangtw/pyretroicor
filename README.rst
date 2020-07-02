@@ -50,9 +50,9 @@ MATLAB implementation from: https://github.com/mkassinopoulos/PRF_estimation
 
 Support
 -------
-Please use `GitHub issues <https://github.com/htwangtw/pyretroicor/issues>` for questions, bug reports or feature requests.
+Please use `GitHub issues <https://github.com/htwangtw/pyretroicor/issues>`_ for questions, bug reports or feature requests.
 
 
 License
 -------
-This project is licensed under `BSD-3-Clause <https://opensource.org/licenses/BSD-3-Clause>`.
+This project is licensed under `BSD-3-Clause <https://opensource.org/licenses/BSD-3-Clause>`_.
