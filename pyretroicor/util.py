@@ -15,7 +15,7 @@ def physio_time(physio, sampling_freq, start_time):
 
     return time, physio
 
-def tr_reference(n_vol):
+def tr_reference(n_vol, tr, time):
     tr_time = np.arange(1, n_vol + 1)  * tr
     tr_idx = []
     for t in tr_time:
@@ -58,19 +58,19 @@ def bids_load_physio():
         start_time = physio_meta["StartTime"]
         columns = physio_meta["Columns"]
 
-def bids_output_name(phsiyo_path):
+def bids_output_name(phsiyo_path, output_root):
     """
     Create file name based on BIDS
     """
     phsiyo_file = Path(phsiyo_path)
     filename_root = phsiyo_file.name.split("_physio")[0]
-    subject = filename_root.name.split("_")[0].split("sub-")[-1]
+    subject = filename_root.split("_")[0].split("sub-")[-1]
     if "ses" in filename_root:
-        session = filename_root.name.split("_")[1].split("ses-")[-1]
-        output_dir = Path(OUTDIR) / "pyretroicor" / f"sub-{subject}" / f"ses-{session}" 
+        session = filename_root.split("_")[1].split("ses-")[-1]
+        output_dir = Path(output_root) / "pyretroicor" / f"sub-{subject}" / f"ses-{session}" 
         out_name = f"{filename_root}_desc-retroicor_regressors.tsv"
     else:
-        output_dir = Path(OUTDIR) / "pyretroicor" / f"sub-{subject}"
+        output_dir = Path(output_root) / "pyretroicor" / f"sub-{subject}"
         out_name = f"{filename_root}_desc-retroicor_regressors.tsv"
 
     # create output dir if not exist
@@ -84,8 +84,8 @@ def save_tsv(regressors, filepath):
     """
     M = int(np.min(regressors.shape) / 2) # I forgot which axis is timeseries
     # save results as tsv
-    header = [f"retroicor_cardiac_{i + 1}" for i in range(M * 2)] \
-           + [f"retroicor_respiration_{i + 1}" for i in range(M * 2)]
+    header = [f"retroicor_cardiac_{i + 1}" for i in range(M)] \
+           + [f"retroicor_respiration_{i + 1}" for i in range(M)]
 
     np.savetxt(filepath, regressors, 
                delimiter="\t", header="\t".join(header), 
