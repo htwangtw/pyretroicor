@@ -1,4 +1,5 @@
-import pkg_resources
+"""Top-level package for PyRETROICOR."""
 
-__version__ = pkg_resources.require(
-    "pyretroicor")[0].version
+__author__ = """Hao-Ting Wang"""
+__email__ = 'htwangtw@gmail.com'
+__version__ = '0.0.2'
