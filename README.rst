@@ -1,5 +1,5 @@
 ===========
-PyRETROICOR
+The project is nolonger maintained!
 ===========
 
 
